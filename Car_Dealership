@@ -1,0 +1,135 @@
+CREATE TABLE "Car" (
+  "car_id" integer PRIMARY KEY,
+  "vin_num" serial,
+  "make" varchar,
+  "model" varchar,
+  "color" varchar,
+  "man_year" integer,
+  "new_car" boolean,
+  "used_car" boolean,
+  "invoice_id" integer,
+  "price" float
+);
+
+CREATE TABLE "invoice" (
+  "invoice_id" integer PRIMARY KEY,
+  "invoice_number" integer,
+  "invoice_date" timestamp,
+  "price" float,
+  "car_id" integer,
+  "customer_id" integer,
+  "sales_id" integer
+);
+
+CREATE TABLE "customers" (
+  "customer_id" integer PRIMARY KEY,
+  "first_name" varchar,
+  "last_name" varchar,
+  "phone_number" integer,
+  "address" varchar
+);
+
+CREATE TABLE "salespeople" (
+  "sales_id" integer PRIMARY KEY,
+  "first_name" varchar,
+  "last_name" varchar
+);
+
+CREATE TABLE "mechanics" (
+  "mechanic_id" integer PRIMARY KEY,
+  "first_name" varchar,
+  "last_name" varchar
+);
+
+CREATE TABLE "service" (
+  "serv_id" integer PRIMARY KEY,
+  "service_name" varchar,
+  "hourly_rate" float,
+  "invoice_id" integer,
+  "mechanic_id" integer
+);
+
+CREATE TABLE "parts" (
+  "part_id" integer PRIMARY KEY,
+  "part_number" integer,
+  "description" varchar,
+  "serv_ticket" integer,
+  "purchase_price" float,
+  "retail_price" float
+);
+
+CREATE TABLE "service_ticket" (
+  "serv_ticket" integer PRIMARY KEY,
+  "retail_price" float,
+  "serv_id" integer,
+  "part_id" integer
+);
+
+ALTER TABLE "invoice" ADD FOREIGN KEY ("car_id") REFERENCES "Car" ("car_id");
+
+ALTER TABLE "invoice" ADD FOREIGN KEY ("customer_id") REFERENCES "customers" ("customer_id");
+
+ALTER TABLE "invoice" ADD FOREIGN KEY ("sales_id") REFERENCES "salespeople" ("sales_id");
+
+ALTER TABLE "parts" ADD FOREIGN KEY ("serv_ticket") REFERENCES "service_ticket" ("serv_ticket");
+
+ALTER TABLE "service" ADD FOREIGN KEY ("mechanic_id") REFERENCES "mechanics" ("mechanic_id");
+
+
+
+ALTER TABLE "service" ADD FOREIGN KEY ("invoice_id") REFERENCES "invoice" ("invoice_id");
+
+ALTER TABLE "service_ticket" ADD FOREIGN KEY ("serv_id") REFERENCES "service" ("serv_id");
+
+ALTER TABLE "service_ticket" ADD FOREIGN KEY ("part_id") REFERENCES "parts" ("part_id");
+
+
+
+insert into "customers" ("customer_id", "first_name", "last_name", "phone_number", "address")
+values  (3, 'Russell', 'Anderson', 2055329002, '6865 state blvd meridian ms 30395')
+
+insert into "Car" ("car_id", "vin_num", "make", "model", "color", "man_year", "new_car", "used_car", "invoice_id", "price")
+values (1, 2534, 'Nissan', 'Altima', 'Black', 2012, false, true, 4578, 10000);
+
+insert into "invoice" ("invoice_id", "invoice_number", "price", "car_id", "customer_id", "sales_id")
+values (4578, 1, 10000, 1, 3, 1 )
+
+insert into "mechanics" ("mechanic_id","first_name", "last_name")
+values (1, 'Freddy', 'Crueger' )
+
+insert into "service" ("serv_id", "service_name", "hourly_rate", "invoice_id", "mechanic_id")
+values (1, 'Water Pump', 30.00, 4578, 1)
+
+insert into "parts" ("part_id", "part_number", "description", "purchase_price", "retail_price")
+values (23, 5, 'Water Pump', 25.00, 35.00)
+
+
+insert into "service_ticket" ("serv_ticket", "retail_price", "serv_id", "part_id")
+values (1, 90.00, 1, 23)
+
+insert into "salespeople" ("sales_id", "first_name", "last_name")
+values ( 2, 'Brock', 'Beefcake')
+
+insert into "Car" ("car_id", "vin_num", "make", "model", "color", "man_year", "new_car", "used_car", "invoice_id", "price")
+values (2, 3578, 'Cheverolet', 'Coverette', 'Green', 1996, false, true, 4579, 15000);
+
+insert into "customers" ("customer_id", "first_name", "last_name", "phone_number", "address")
+values  (5, 'Roddy', 'Piper', 2054456784, '666 Hells Cr')
+
+insert into "parts" ("part_id", "part_number", "description", "purchase_price", "retail_price")
+values (17, 7, 'Driver-Fender', 55.00, 85.00)
+
+insert into "invoice" ("invoice_id", "invoice_number", "price", "car_id", "customer_id", "sales_id")
+values (4579, 1, 15000, 2, 4, 2 )
+
+insert into "service" ("serv_id", "service_name", "hourly_rate", "invoice_id", "mechanic_id")
+values (2, 'Driver-Fender', 65.00, 4579, 1)
+
+
+insert into "service_ticket" ("serv_ticket", "retail_price", "serv_id", "part_id")
+values (2, 125, 2, 17)
+
+insert into "mechanics" ("mechanic_id","first_name", "last_name")
+values (2, 'Jason', 'Vorhees' )
+
+
